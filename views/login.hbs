@@ -1,0 +1,25 @@
+<section class="login-page">
+    <div class="login-card">
+        <a class="login-logo" href="/">store<span>.prime</span></a>
+        <p class="eyebrow">Welcome Back</p>
+        <h1>Sign in to your account</h1>
+        <p class="login-copy">Use your email and password to access your dashboard or continue shopping.</p>
+
+        {{#if error}}
+            <div class="login-error">{{error}}</div>
+        {{/if}}
+
+        <form action="/login" method="POST" class="login-form">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="admin@example.com" value="{{email}}" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password" placeholder="Enter password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p class="login-note">Don't have an account? <a href="/register">Register</a></p>
+    </div>
+</section>

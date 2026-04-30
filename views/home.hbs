@@ -1,0 +1,78 @@
+<header class="topbar">
+    <div class="logo">store<span>.prime</span></div>
+    <div class="search">
+        <input type="text" placeholder="Search products, brands, and more">
+        <button type="button">Search</button>
+    </div>
+    {{#if user}}
+    <div> <a class="nav-link" href="/admin">Dashboard</a></div>
+    {{/if}}
+    <div class="account-menu">
+        <button type="button" class="account-trigger">
+            {{#if user}}
+                <span>Hello, {{user.name}}</span>
+                {{!-- <strong>{{user.role}}</strong> --}}
+            {{else}}
+                <span>Hello, sign in</span>
+                <strong>Account & Lists</strong>
+            {{/if}}
+        </button>
+        <div class="account-dropdown">
+            {{#if user}}
+                <p>Signed in as <strong>{{user.email}}</strong></p>
+                {{#if (eq user.role 'admin')}}
+                    <a class="signin-btn" href="/admin">Dashboard</a>
+                {{/if}}
+                <form action="/login/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <button type="submit" class="signin-btn logout-dropdown-btn">Logout</button>
+                </form>
+            {{else}}
+                <a class="signin-btn" href="/login">Sign in</a>
+                <p>New customer? <a href="/register">Start here.</a></p>
+            {{/if}}
+        </div>
+    </div>
+    <div>Orders</div>
+    <div>Cart</div>
+</header>
+
+<nav class="nav">
+    <div>All</div>
+    <div>Today's Deals</div>
+    <div>Electronics</div>
+    <div>Fashion</div>
+    <div>Home</div>
+    <div>Gaming</div>
+</nav>
+
+<section class="hero">
+    <div>
+        <h1>Big Spring Sale</h1>
+        <p>Discover daily deals on top products with fast delivery and trusted checkout.</p>
+    </div>
+    <div class="hero-badge">Up to 50% Off</div>
+</section>
+
+<section class="products">
+    {{#if haveProduct}}
+        {{#each products}}
+            <article class="card">
+                {{#if this.image}}
+                    <div class="thumb" style="background-image: url('{{this.image}}'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #fff;"></div>
+                {{else}}
+                    <div class="thumb"></div>
+                {{/if}}
+                <h3 class="title">{{this.name}}</h3>
+                <div class="price">${{this.price}}</div>
+                <button type="button">Add to Cart</button>
+            </article>
+        {{/each}}
+    {{else}}
+        <article class="card">
+            <h3 class="title">No products yet</h3>
+            <div class="price">Visit admin panel to add products</div>
+            <button type="button">Add to Cart</button>
+        </article>
+    {{/if}}
+</section>

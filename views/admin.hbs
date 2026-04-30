@@ -1,0 +1,273 @@
+<header class="topbar">
+    <div class="logo">store<span>.prime</span></div>
+    <div class="search">
+        <input type="text" placeholder="Search dashboard modules">
+        <button type="button">Admin</button>
+    </div>
+   
+    <form action="/login/logout" method="POST" class="logout-form">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button type="submit">Logout</button>
+    </form>
+</header>
+
+<nav class="nav">
+    <div><a class="nav-link" href="/">Store</a></div>
+    <div><a class="nav-link" href="/admin/products">Dashboard</a></div>
+</nav>
+
+<section class="dashboard-shell">
+    <aside class="sidebar">
+        <div class="sidebar-card">
+            <p class="sidebar-label">Management</p>
+            <a class="sidebar-link {{#if (eq activeTab 'AdminUsers')}}active{{/if}}" href="/admin/AdminUsers">Admin Users</a>
+            <a class="sidebar-link {{#if (eq activeTab 'products')}}active{{/if}}" href="/admin/products">Products</a>
+            <a class="sidebar-link {{#if (eq activeTab 'sellers')}}active{{/if}}" href="/admin/sellers">Sellers</a>
+            <a class="sidebar-link {{#if (eq activeTab 'customers')}}active{{/if}}" href="/admin/customers">Customers</a>
+            <a class="sidebar-link {{#if (eq activeTab 'orders')}}active{{/if}}" href="/admin/orders">Orders</a>
+        </div>
+
+        <div class="sidebar-card">
+            <p class="sidebar-label">Quick Stats</p>
+            <div class="mini-stat">
+                <span>Admin Users</span>
+                <strong>{{users.length}}</strong>
+            </div>
+            <div class="mini-stat">
+                <span>Total Products</span>
+                <strong>{{products.length}}</strong>
+            </div>
+            <div class="mini-stat">
+                <span>Active Sellers</span>
+                <strong>18</strong>
+            </div>
+            <div class="mini-stat">
+                <span>Customers</span>
+                <strong>245</strong>
+            </div>
+            <div class="mini-stat">
+                <span>Orders Today</span>
+                <strong>37</strong>
+            </div>
+        </div>
+    </aside>
+
+    <div class="dashboard-main">
+        <section class="dashboard-hero">
+            <div>
+                <p class="eyebrow">Admin Dashboard</p>
+                <h1>Manage products, sellers, customers, and orders</h1>
+                <p class="dashboard-copy">Your dashboard now has room for all store operations, with the product CRUD section ready to use below.</p>
+            </div>
+            <div class="hero-badge">Store Control Center</div>
+        </section>
+
+        <section class="overview-grid">
+            <article class="overview-card {{#if (eq activeTab 'AdminUsers')}}active-overview{{/if}}">
+                <span class="overview-title">Admin Users</span>
+                <strong>{{users.length}}</strong>
+                <p>Create, update, and remove dashboard users.</p>
+            </article>
+            <article class="overview-card {{#if (eq activeTab 'products')}}active-overview{{/if}}">
+                <span class="overview-title">Products</span>
+                <strong>{{products.length}}</strong>
+                <p>Create, update, and remove product records.</p>
+            </article>
+            <article class="overview-card {{#if (eq activeTab 'sellers')}}active-overview{{/if}}">
+                <span class="overview-title">Sellers</span>
+                <strong>18</strong>
+                <p>Track approved vendors and manage onboarding.</p>
+            </article>
+            <article class="overview-card {{#if (eq activeTab 'customers')}}active-overview{{/if}}">
+                <span class="overview-title">Customers</span>
+                <strong>245</strong>
+                <p>Review customer activity and account growth.</p>
+            </article>
+            <article class="overview-card {{#if (eq activeTab 'orders')}}active-overview{{/if}}">
+                <span class="overview-title">Orders</span>
+                <strong>37</strong>
+                <p>Monitor fulfillment, shipping, and returns.</p>
+            </article>
+        </section>
+
+        {{#if (eq activeTab 'AdminUsers')}}
+        <section class="admin-wrap admin-single">
+            <div class="admin-panel">
+                <div class="product-toolbar">
+                    <h2>User List</h2>
+                    <details class="create-product">
+                        <summary class="create-product-btn">Create User</summary>
+                        <form action="/admin/AdminUsers/create" method="POST" class="admin-form create-form-card">
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                            <input type="text" name="name" placeholder="User name" required>
+                            <input type="email" name="email" placeholder="Email" required>
+                            <input type="password" name="password" placeholder="Password" required>
+                            <select name="role" required>
+                                <option value="admin">admin</option>
+                                <option value="Seller">Seller</option>
+                                <option value="customer">customer</option>
+                            </select>
+                            <select name="isActive" required>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                            <button type="submit">Add User</button>
+                        </form>
+                    </details>
+                </div>
+
+                {{#if haveUsers}}
+                    <div class="product-table-wrap">
+                        <div class="product-table-head user-table-head">
+                            <div>ID</div>
+                            <div>Name</div>
+                            <div>Email</div>
+                            <div>Password</div>
+                            <div>Role</div>
+                            <div>Status</div>
+                            <div>Actions</div>
+                        </div>
+                        {{#each users}}
+                            <form action="/admin/AdminUsers/update" method="POST" class="product-table-row user-table-row editable-row">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <div class="col-id">#{{this.id}}</div>
+                                <input class="inline-input" type="text" name="name" value="{{this.name}}" required readonly>
+                                <input class="inline-input" type="email" name="email" value="{{this.email}}" required readonly>
+                                <input class="inline-input" type="password" name="password" placeholder="New password" readonly>
+                                <select class="inline-input" name="role" disabled>
+                                    <option value="admin" {{#if (eq this.role 'admin')}}selected{{/if}}>admin</option>
+                                    <option value="Seller" {{#if (eq this.role 'Seller')}}selected{{/if}}>Seller</option>
+                                    <option value="customer" {{#if (eq this.role 'customer')}}selected{{/if}}>customer</option>
+                                </select>
+                                <select class="inline-input" name="isActive" disabled>
+                                    <option value="true" {{#if this.isActive}}selected{{/if}}>Active</option>
+                                    <option value="false" {{#unless this.isActive}}selected{{/unless}}>Inactive</option>
+                                </select>
+                                <div class="row-actions">
+                                    <button type="button" class="edit-btn" onclick="enableEdit(this)">Update</button>
+                                    <button type="submit" class="save-btn hidden">Save</button>
+                                    <button type="button" class="cancel-btn hidden" onclick="cancelEdit(this)">Cancel</button>
+                                    <button type="submit" formaction="/admin/AdminUsers/delete" formnovalidate class="danger-btn">Delete</button>
+                                </div>
+                            </form>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p>No users found yet. Create your first admin user.</p>
+                {{/if}}
+            </div>
+        </section>
+        {{else if (eq activeTab 'products')}}
+        <section class="admin-wrap admin-single">
+            <div class="admin-panel">
+                <div class="product-toolbar">
+                    <h2>Product List</h2>
+                    <details class="create-product">
+                        <summary class="create-product-btn">Create Product</summary>
+                        <form action="/admin/products/create" method="POST" class="admin-form create-form-card">
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                            <input type="text" name="name" placeholder="Product name" required>
+                            <input type="number" step="0.01" min="0" name="price" placeholder="Price" required>
+                            <input type="text" name="image" placeholder="Image URL">
+                            <textarea name="description" placeholder="Description" rows="3" required></textarea>
+                            <button type="submit">Add Product</button>
+                        </form>
+                    </details>
+                </div>
+
+                {{#if haveProduct}}
+                    <div class="product-table-wrap">
+                        <div class="product-table-head">
+                            <div>ID</div>
+                            <div>Image</div>
+                            <div>Name</div>
+                            <div>Price</div>
+                            <div>Description</div>
+                            <div>Image URL</div>
+                            <div>Actions</div>
+                        </div>
+                        {{#each products}}
+                            <form action="/admin/products/update" method="POST" class="product-table-row product-edit-row editable-row">
+                                <input type="hidden" name="_csrf" value="{{../csrfToken}}">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <div class="col-id">#{{this.id}}</div>
+                                <div class="col-image">
+                                    {{#if this.image}}
+                                        <img src="{{this.image}}" alt="{{this.name}}" class="table-image">
+                                    {{else}}
+                                        <span class="no-image">No image</span>
+                                    {{/if}}
+                                </div>
+                                <input class="inline-input" type="text" name="name" value="{{this.name}}" required readonly>
+                                <input class="inline-input" type="number" step="0.01" min="0" name="price" value="{{this.price}}" required readonly>
+                                <textarea class="inline-input" name="description" rows="2" required readonly>{{this.description}}</textarea>
+                                <input class="inline-input" type="text" name="image" value="{{this.image}}" placeholder="Image URL" readonly>
+                                <div class="row-actions">
+                                    <button type="button" class="edit-btn" onclick="enableEdit(this)">Update</button>
+                                    <button type="submit" class="save-btn hidden">Save</button>
+                                    <button type="button" class="cancel-btn hidden" onclick="cancelEdit(this)">Cancel</button>
+                                    <button type="submit" formaction="/admin/products/delete" formnovalidate class="danger-btn">Delete</button>
+                                </div>
+                            </form>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p>No products found yet. Create your first product.</p>
+                {{/if}}
+            </div>
+        </section>
+        {{else}}
+        <section class="admin-wrap admin-single">
+            <div class="admin-panel">
+                {{#if (eq activeTab 'sellers')}}
+                    <h2>Sellers</h2>
+                    <p>This section is ready for seller CRUD (approve sellers, profiles, payouts).</p>
+                {{else if (eq activeTab 'customers')}}
+                    <h2>Customers</h2>
+                    <p>This section is ready for customer management (profiles, status, support).</p>
+                {{else if (eq activeTab 'orders')}}
+                    <h2>Orders</h2>
+                    <p>This section is ready for order management (fulfillment, shipping, refunds).</p>
+                {{else}}
+                    <h2>Dashboard</h2>
+                    <p>Select a module from the left menu to manage it.</p>
+                {{/if}}
+            </div>
+        </section>
+        {{/if}}
+    </div>
+</section>
+
+<script>
+    function enableEdit(button) {
+        const row = button.closest(".editable-row");
+        if (!row) return;
+
+        row.querySelectorAll(".inline-input").forEach((field) => {
+            if (field.tagName === "SELECT") {
+                field.disabled = false;
+            } else {
+                field.readOnly = false;
+            }
+        });
+
+        row.classList.add("is-editing");
+    }
+
+    function cancelEdit(button) {
+        const row = button.closest(".editable-row");
+        if (!row) return;
+
+        row.reset();
+        row.querySelectorAll(".inline-input").forEach((field) => {
+            if (field.tagName === "SELECT") {
+                field.disabled = true;
+            } else {
+                field.readOnly = true;
+            }
+        });
+
+        row.classList.remove("is-editing");
+    }
+</script>
