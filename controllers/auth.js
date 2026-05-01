@@ -1,4 +1,4 @@
-const LoginService = require("../domain/service/LoginService");
+const AuthService = require("../domain/service/AuthService");
 const SessionService = require("../domain/service/SessionService");
 
 exports.getLogin = async (req, res) => {
@@ -10,7 +10,7 @@ exports.getLogin = async (req, res) => {
 exports.postLogin = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await LoginService.login(email, password);
+        const user = await AuthService.login(email, password);
         await SessionService.createUserSession(req, user);
         res.redirect("/");
     } catch (err) {
@@ -25,7 +25,7 @@ exports.postLogin = async (req, res) => {
 
 exports.postLogout = async (req, res) => {
     try {
-        await LoginService.logout(req);
+        await AuthService.logout(req);
         res.redirect("/login");
     } catch (err) {
         console.error(err);

@@ -13,7 +13,7 @@ require('dotenv').config();
 // Routes
 const homeRoutes = require('./routes/home');
 const adminRoutes = require('./routes/admin');
-const loginRoutes = require('./routes/login');
+const AuthRoutes = require('./routes/auth');
 
 // Create a new express application instance
 app.use(express.json());
@@ -29,6 +29,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24,
     },
 }));
+
 app.use(csrfProtection);
 
 // Set up Handlebars
@@ -47,7 +48,7 @@ app.set('views', 'views');
 
 app.use("/", homeRoutes);
 app.use("/admin", authGuard,AdminRoleGuard, adminRoutes);
-app.use("/login", loginRoutes);
+app.use("/auth", AuthRoutes);
 
 const port = process.env.PORT || 3000;
 const startServer = async () => {

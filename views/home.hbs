@@ -23,13 +23,13 @@
                 {{#if (eq user.role 'admin')}}
                     <a class="signin-btn" href="/admin">Dashboard</a>
                 {{/if}}
-                <form action="/login/logout" method="POST">
+                <form action="/auth/logout" method="POST">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <button type="submit" class="signin-btn logout-dropdown-btn">Logout</button>
                 </form>
             {{else}}
-                <a class="signin-btn" href="/login">Sign in</a>
-                <p>New customer? <a href="/register">Start here.</a></p>
+                <a class="signin-btn" href="/auth/login">Sign in</a>
+                <p>New customer? <a href="/auth/register">Start here.</a></p>
             {{/if}}
         </div>
     </div>

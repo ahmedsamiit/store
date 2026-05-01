@@ -46,7 +46,13 @@ module.exports = {
         return req.session.user;
     },
     createUserSession: async (req, user) => {
+        const csrfToken = req.session.csrfToken;
+
         await regenerateSession(req);
+
+        if (csrfToken) {
+            req.session.csrfToken = csrfToken;
+        }
 
         req.session.user = {
             id: user.id,

@@ -9,7 +9,7 @@
             <div class="login-error">{{error}}</div>
         {{/if}}
 
-        <form action="/login" method="POST" class="login-form">
+        <form action="/auth/login" method="POST" class="login-form">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <label for="email">Email</label>
             <input id="email" type="email" name="email" placeholder="admin@example.com" value="{{email}}" required>
@@ -20,6 +20,6 @@
             <button type="submit">Login</button>
         </form>
 
-        <p class="login-note">Don't have an account? <a href="/register">Register</a></p>
+        <p class="login-note">Don't have an account? <a href="/auth/register">Register</a></p>
     </div>
 </section>
