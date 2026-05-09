@@ -8,14 +8,14 @@ exports.getLogin = async (req, res) => {
 };
 
 exports.postLogin = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.validatedBody;
+
     try {
         const user = await AuthService.login(email, password);
         await SessionService.createUserSession(req, user);
         res.redirect("/");
     } catch (err) {
-        console.error(err);
-        res.render("login", { 
+        res.status(401).render("login", {
             pageTitle: "Login",
             error: "Invalid email or password",
             email: email,
