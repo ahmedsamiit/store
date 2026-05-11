@@ -76,3 +76,27 @@
         </article>
     {{/if}}
 </section>
+
+{{#if pagination}}
+    <nav class="pagination" aria-label="Product pagination">
+        {{#if pagination.hasPreviousPage}}
+            <a href="/?page={{pagination.previousPage}}&limit={{pagination.perPage}}">Previous</a>
+        {{else}}
+            <span class="disabled">Previous</span>
+        {{/if}}
+
+        {{#each pagination.pages}}
+            {{#if this.isCurrent}}
+                <span class="active">{{this.number}}</span>
+            {{else}}
+                <a href="/?page={{this.number}}&limit={{../pagination.perPage}}">{{this.number}}</a>
+            {{/if}}
+        {{/each}}
+
+        {{#if pagination.hasNextPage}}
+            <a href="/?page={{pagination.nextPage}}&limit={{pagination.perPage}}">Next</a>
+        {{else}}
+            <span class="disabled">Next</span>
+        {{/if}}
+    </nav>
+{{/if}}

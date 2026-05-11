@@ -154,6 +154,37 @@ body {
     font-weight: 600;
 }
 
+.pagination {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pagination a,
+.pagination span {
+    min-width: 38px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    background: #fff;
+    color: var(--amazon-text);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pagination .active {
+    background: #ffd814;
+}
+
+.pagination .disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
 .nav-link {
     color: #fff;
     text-decoration: none;

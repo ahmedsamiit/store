@@ -7,6 +7,15 @@ const getProductRepository = () => AppDataSource.getRepository(Product);
     findAll: async () => {
         return await getProductRepository().find();
     },
+    findPaginated: async ({ skip, take }) => {
+        return await getProductRepository().findAndCount({
+            skip,
+            take,
+            order: {
+                id: "DESC",
+            },
+        });
+    },
     findById: async (id) => {
         return await getProductRepository().findOneBy({ id });
     },
